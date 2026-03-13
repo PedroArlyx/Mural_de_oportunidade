@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Professor</title>
+    <link rel="stylesheet" href="..//static//css//cadastrarprofessor.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Cadastro de Professor</h2>
+
+    <form action="/professor/cadastrar" method="post">
+
+        <label>Nome</label>
+        <input type="text" name="nome" required>
+
+        <label>Email</label>
+        <input type="email" name="email" required>
+
+        <label>Senha</label>
+        <input type="password" name="senha" required>
+
+        <label>Nome do Projeto</label>
+        <input type="text" name="nome_projeto" required>
+
+        <button type="submit">Cadastrar</button>
+
+    </form>
+</div>
+
+</body>
+</html>
