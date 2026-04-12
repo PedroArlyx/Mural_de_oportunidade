@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macaquinho faz tudo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#2563eb', // azul
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: -4px;
+            width: 100%;
+            padding: 8px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+        <nav>
+            <div class="container mx-auto mt-8 p-4">
+            <h1 class="text-2xl font-semibold italic">Macaquinho faz Tudo</h1>
+        </div>
+    </nav>
+        
+    <main class="container mx-auto mt-8 p-4 max-w-2xl">    
+        <form id="anuncio" class="bg-white p-6 rounded-lg shadow-md mb-8" method="Post" action="/cadastrar">
+            <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+                Anunciar Novo Serviço
+            </h2>
+
+            <label class="block m2">Título do Serviço</label>
+            <input type="text" name="titulo" class="w-full p-2 border rounded mb-4" placeholder="Ex.: Pinta de Casas">
+        
+            <label class="block m2">Categoria</label>
+            <select name="categoria" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md mb-4">    
+                <option value="reformas">Reparos e Reformas</option>
+                <option value="educação">Educação e Monitoria</option>
+                <option value="gastronomia">Gastronomia e Eventos</option>
+                <option value="animais">Animais e Pets</option>
+                <option value="tecnologia">Tecnologia e Design</option>
+                <option value="outros">Outros</option>
+             </select>  
+
+            <div class="form-group">
+                <label class="block m2">Descrição do Serviço</label>
+                <textarea name="descricao" class="w-full p-2 border rounded mb-4" placeholder="Descreva o serviço que você oferece..." style="resize: none; height: 100px;"></textarea>
+            </div>
+
+             <button type="submit" class="w-full bg-brand hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-md shadow transition duration-150">
+            Publicar no Mural
+            </button>
+        </form>
+
+        <section id="lista">
+            <h2 class=" text-xl font-bold mb-4 text-gray-800">Serviços na Região</h2>
+            <div id="mural" class="text-xl font-bold mb-4 text-gray-800">
+              
+                {% for servico in servicos%}
+
+                <div class="bg-white p-4 rounded-lg shadow-md mb-4 border-l-4 border-blue-500">
+                    <h3 class="font-bold text-lg text-blue-600">{{ servico.titulo }}</h3> 
+                    <span class="text-xs bg-gray-200 px-2 py-1 rounded">{{ servico.categoria }}</span>       <!-- Serviços serão exibidos aqui -->
+                    <p class="text-gray-600">{{ servico.descricao }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function publicarServico() {
+            alert("a gente ainda ta integrando com o back rsrsrsrs")
+        }
+    </script>
+</body>
+</html>
