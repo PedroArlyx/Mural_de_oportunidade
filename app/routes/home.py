@@ -1,7 +1,11 @@
 from flask import Blueprint
 
-bp=Blueprint('main', __name__)
+from app.services import AnuncioService
 
-@bp.route('/')
+bp_home=Blueprint('main', __name__)
+
+service = AnuncioService()
+@bp_home.route('/', methods = ['GET'])
 def home():
-    return "Servidor rodando"
+    return service.listar_anuncios()
+
