@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,request,redirect
+from flask import Blueprint,render_template,request,redirect,url_for
 from app.services import UsuarioService
 from flask_login import login_user,logout_user,login_required, current_user
 
@@ -8,10 +8,12 @@ service=UsuarioService()
 
 @bp_login.route('/',methods=['GET','POST'])
 def login():
+
     if current_user.is_authenticated:
-        return redirect('/home')
+        return redirect(url_for('main.home'))
 
     if request.method == 'POST':
+
         email = request.form.get('email')
         senha = request.form.get('senha')
 

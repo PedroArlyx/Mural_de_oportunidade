@@ -15,11 +15,12 @@ def create_app():
 
      bd.init_app(app)
      login_manager.init_app(app)
-     login_manager.login_view = 'login.login'
+     login_manager.login_view = 'login.Login'
 
      app.register_blueprint(bp_home)
      app.register_blueprint(bp_login)
      app.register_blueprint(bp_register)
      app.register_blueprint(bp_anuncio)
+
 
      return app
