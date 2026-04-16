@@ -13,6 +13,9 @@ class Adm_Service:
     def deletar_usuario(self,id):
         usuario = self.usuario_repo.buscar_por_id(id)
 
+        if not usuario:
+            return "usuario nao encontrado"
+
         self.usuario_repo.deletar(usuario)
 
         return "usuario deletado"
