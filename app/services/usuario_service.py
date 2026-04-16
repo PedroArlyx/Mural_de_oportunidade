@@ -6,13 +6,19 @@ from werkzeug.security import generate_password_hash, check_password_hash
 class UsuarioService:
 
     def __init__(self):
-        self.UsuarioRepo = UsuarioRepo()
+        self.Usuario_repo = UsuarioRepo()
 
-    def cadastrarUsuario(self, nome, email, senha, perfil, bairro, cidade):
-        usuario_existente = self.UsuarioRepo.buscar_por_email(email)
+    def cadastrar_usuario(self, nome, email, senha, perfil, bairro, cidade):
+        if not nome or not email or not senha:
+            return "dados Invalidos"
+
+        if len(senha) <6:
+            return "senha muito curta"
+
+        usuario_existente = self.Usuario_repo.buscar_por_email(email)
 
         if usuario_existente:
-            return None
+            return "email ja cadastrado"
 
         senha_hash = generate_password_hash(senha)
 
@@ -25,15 +31,15 @@ class UsuarioService:
             cidade=cidade
         )
 
-        return self.UsuarioRepo.salvar(usuario)
+        return self.Usuario_repo.salvar(usuario)
 
     def login(self, email,senha):
-        usuario = self.UsuarioRepo.buscar_por_email(email)
+        usuario = self.Usuario_repo.buscar_por_email(email)
 
         if not usuario:
-            return None
+            return "usuario nao encontrado"
 
         if not check_password_hash(usuario.senha_hash, senha):
-            return None
+            return "senha incorreto"
 
         return usuario

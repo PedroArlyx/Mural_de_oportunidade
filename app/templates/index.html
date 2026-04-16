@@ -22,7 +22,7 @@
 
     <main class="container mx-auto p-4 max-w-2xl">
 
-        <form id="anuncio" class="bg-white p-6 rounded-lg shadow-md mb-8" method="POST" action="{{ url_for('anuncio.criar_anuncio') }}">
+        <form id="anuncio" class="..." method="POST" action="{{ url_for('anuncio.criar_anuncio') }}">
             <h2 class="text-xl font-bold mb-6 text-gray-800">Anunciar Novo Serviço</h2>
 
             <label class="block mb-2 text-sm font-medium text-gray-700">Título</label>
@@ -59,11 +59,11 @@
                         <p class="text-sm text-gray-600 mb-2">{{ anuncio.descricao }}</p>
                         <div class="flex items-center gap-3">
                             <span class="text-brand font-bold text-lg">R$ {{ "%.2f"|format(anuncio.preco|float) }}</span>
-                            <span class="text-xs text-gray-400">| por {{ anuncio.prestador.nome }}</span>
+                            <span class="text-xs text-gray-400">| por {{ anuncio.usuario.nome if anuncio.usuario else 'Desconhecido' }}</span>
                         </div>
                     </div>
 
-                    {% if current_user.id == anuncio.prestador_id or current_user.is_admin %}
+                    {% if current_user.id == anuncio.usuario_id or sou_admin %}
                     <form action="{{ url_for('anuncio.deletar_anuncio', id=anuncio.id) }}" method="POST" onsubmit="return confirm('Queres mesmo apagar este anúncio?')">
                         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white text-xs py-2 px-4 rounded-md transition-colors shadow-sm">
                             Apagar

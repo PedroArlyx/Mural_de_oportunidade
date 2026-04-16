@@ -4,9 +4,13 @@ from app.models import Usuario
 from app.services import UsuarioService
 from flask_login import login_user,logout_user,login_required, current_user
 
+from app.services import AdministradorService
+
 bp_login = Blueprint('login', __name__, url_prefix='/login')
 
-service=UsuarioService()
+service_usuario = UsuarioService()
+service_admin = AdministradorService()
+
 
 @bp_login.route('/', methods=['GET', 'POST'])
 def login():
@@ -16,31 +20,23 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email').strip()
         senha = request.form.get('senha')
-        origem = request.form.get('origem')
 
-        usuario = Usuario.query.filter(Usuario.email.ilike(email)).first()
+        usuario = service_usuario.login(email, senha)
 
-        if not usuario or not check_password_hash(usuario.senha_hash, senha):
-            flash("E-mail ou senha incorretos!", "danger")
-            return redirect(url_for('login.login'))
-
-        if origem == 'admin':
-            if usuario.is_admin:
-                login_user(usuario)
-                return redirect(url_for('main.painel_admin'))
-            else:
-                flash("Acesso negado: você não é um administrador", "danger")
-                return redirect(url_for('login.login'))
-        elif origem == 'usuario':
+        if not isinstance(usuario, str) and usuario:
             login_user(usuario)
             return redirect(url_for('main.mural'))
 
+        admin = service_admin.login_admin(email, senha)
+
+        if not isinstance(admin, str) and admin:
+            login_user(admin)
+            return redirect(url_for('main.mural'))
+
+        flash("Email ou senha incorretos")
+        return redirect(url_for('login.login'))
+
     return render_template('login.html')
 
-@bp_login.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect ('/login')
 
 
