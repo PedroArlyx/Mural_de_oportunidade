@@ -18,5 +18,5 @@ def listar_Usuarios():
 @login_required
 @admin_required
 def deletar_Usuario(id):
-    service.deletar_usuario(id)
+    service.deletar_usuario(id, current_user.is_admin)
     return redirect('/adm/usuarios')
