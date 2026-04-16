@@ -12,4 +12,10 @@ class UsuarioRepo:
     def buscar_por_email(self,email):
         return Usuario.query.filter_by(email=email).first()
 
-    
+    def buscar_por_id(selfself,id):
+        return Usuario.query.get(id)
+    def buscar_todos(self):
+        return Usuario.query.all()
+    def deletar(self,usuario):
+        bd.session.delete(usuario)
+        bd.session.commit()
