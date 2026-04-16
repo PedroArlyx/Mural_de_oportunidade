@@ -1,7 +1,6 @@
 from extensao import bd
 from flask_login import UserMixin
 
-
 class Administrador(bd.Model, UserMixin):
     __tablename__ = 'administradores'
 

@@ -1,7 +1,4 @@
 from flask import Blueprint, request, redirect, flash, url_for
-
-
-from app.models import Anuncio
 from app.services import AnuncioService
 from flask_login import current_user, login_required
 
@@ -29,13 +26,13 @@ def criar_anuncio():
         except ValueError:
             return "Precisa ser um valor numerico"
 
-        anuncio=service.criar_anuncio(prestador_id,
+        resultado=service.criar_anuncio(prestador_id,
                 categoria_id,
                 titulo,
                 descricao,
                 preco)
 
-        return "anuncio criado"
+        return str(resultado)
 
 @bp_anuncio.route('/deletar/<int:id>',methods = ['POST'])
 @login_required
@@ -43,7 +40,8 @@ def deletar_anuncio(id):
 
     usuario_id = current_user.id
 
-    resultado = service.deletar_anuncio(id,usuario_id)
+    resultado = service.deletar_anuncio(id,current_user.id,current_user.is_admin)
+    flash(resultado)
 
     return redirect(url_for('main.mural'))
 
@@ -69,21 +67,3 @@ def atualizar_anuncio(id):
     return "anucio atualizado"
 
 
-@bp_anuncio.route('/cadastrar', methods=['POST'])
-@login_required
-def cadastrar():
-    from extensao import bd as db
-    from app.models import Anuncio
-
-    novo_anuncio = Anuncio(
-        titulo=request.form.get('titulo'),
-        descricao=request.form.get('descricao'),
-        preco=float(request.form.get('preco').replace(',', '.')) if request.form.get('preco') else 0.0,
-        categoria_id=int(request.form.get('categoria')) if request.form.get('categoria') else 1,
-        prestador_id=current_user.id
-    )
-
-    db.session.add(novo_anuncio)
-    db.session.commit()
-
-    return redirect(url_for('main.mural'))

@@ -4,20 +4,20 @@ from app.repositories import AnuncioRepo
 
 class AnuncioService:
     def __init__(self):
-        self.anuncioRepo = AnuncioRepo()
+        self.anuncio_Repo = AnuncioRepo()
 
     def criar_anuncio(self,prestador_id, categoria_id,titulo,descricao,preco):
         if preco < 0:
             return "Preco nao poder ser negativo"
 
         anuncio = Anuncio(prestador_id=prestador_id,categoria_id=categoria_id,titulo = titulo,descricao= descricao,preco=preco,status='ativo')
-        return self.anuncioRepo.salvar_anuncio(anuncio)
+        return self.anuncio_Repo.salvar_anuncio(anuncio)
 
     def listar_anuncios(self):
-        return self.anuncioRepo.listar_todos_anuncios()
+        return self.anuncio_Repo.listar_todos_anuncios()
 
     def atualizar_anuncio(self,id,usuario_id,titulo,descricao,preco):
-        anuncio = self.anuncioRepo.buscar_por_id(id)
+        anuncio = self.anuncio_Repo.buscar_por_id(id)
 
         if not anuncio:
            return "Anuncio nao encontrado"
@@ -35,18 +35,18 @@ class AnuncioService:
         anuncio.descricao = descricao
         anuncio.preco = preco
 
-        return self.anuncioRepo.salvar_anuncio(anuncio)
+        return self.anuncio_Repo.salvar_anuncio(anuncio)
 
-    def deletar_anuncio(self,id,usuario_id):
-        anuncio = self.anuncioRepo.buscar_por_id(id)
+    def deletar_anuncio(self,id,usuario_id,is_admin = False):
+        anuncio = self.anuncio_Repo.buscar_por_id(id)
 
         if not anuncio:
             return "anuncio nao encotrado"
 
-        if anuncio.prestador_id != usuario_id:
+        if anuncio.prestador_id != usuario_id and not is_admin:
             return "voce nao tem permissao para deletar esse anuncio"
 
-        self.anuncioRepo.deletar_anuncio(anuncio)
+        self.anuncio_Repo.deletar_anuncio(anuncio)
 
         return "anuncio deletado"
 

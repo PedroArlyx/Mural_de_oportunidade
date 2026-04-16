@@ -17,6 +17,7 @@ class Usuario(bd.Model, UserMixin):
    def __repr__(self):
         return (f"Usuario(nome={self.nome}, email={self.email},perfil={self.perfil},bairro={self.bairro},"
                 f"cidade={self.cidade},media_avaliacao={self.media_avaliacao},criado_em={self.criado_em}))")
+
    @property
    def is_admin(self):
         return False
