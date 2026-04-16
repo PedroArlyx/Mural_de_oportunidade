@@ -62,7 +62,7 @@ def atualizar_anuncio(id):
     except ValueError:
         return "Preco invalido"
 
-    anuncio = service.atualizar_anuncio(id,usuario_id,titulo,descricao,preco)
+    anuncio = service.atualizar_anuncio(id,usuario_id,titulo,descricao,preco,current_user.is_admin)
 
     return "anucio atualizado"
 

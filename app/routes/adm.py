@@ -10,13 +10,14 @@ service = Adm_Service()
 @bp_adm.route('/usuarios')
 @login_required
 @admin_required
-def listar_Usuarios():
-    usuario = service.listar_todos_usuarios()
+def listar_usuarios():
+    usuarios = service.listar_todos_usuarios()
     return render_template('')
 
-@bp_adm.route('/usuario/<int:id>', methods = ['GET','POST'])
+@bp_adm.route('/usuario/<int:id>', methods = ['POST'])
 @login_required
 @admin_required
-def deletar_Usuario(id):
-    service.deletar_usuario(id, current_user.is_admin)
+def deletar_usuario(id):
+    resultado =service.deletar_usuario(id, current_user.is_admin)
+    flash(resultado)
     return redirect('/adm/usuarios')

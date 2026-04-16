@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 class UsuarioService:
 
     def __init__(self):
-        self.Usuario_Repo = UsuarioRepo()
+        self.Usuario_repo = UsuarioRepo()
 
     def cadastrar_usuario(self, nome, email, senha, perfil, bairro, cidade):
         if not nome or not email or not senha:
@@ -15,7 +15,7 @@ class UsuarioService:
         if len(senha) <6:
             return "senha muito curta"
 
-        usuario_existente = self.Usuario_Repo.buscar_por_email(email)
+        usuario_existente = self.Usuario_repo.buscar_por_email(email)
 
         if usuario_existente:
             return "email ja cadastrado"
@@ -31,10 +31,10 @@ class UsuarioService:
             cidade=cidade
         )
 
-        return self.Usuario_Repo.salvar(usuario)
+        return self.Usuario_repo.salvar(usuario)
 
     def login(self, email,senha):
-        usuario = self.Usuario_Repo.buscar_por_email(email)
+        usuario = self.Usuario_repo.buscar_por_email(email)
 
         if not usuario:
             return "usuario nao encontrado"

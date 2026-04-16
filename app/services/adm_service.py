@@ -1,3 +1,5 @@
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from app.repositories import  UsuarioRepo
 
 
@@ -22,5 +24,4 @@ class Adm_Service:
         self.usuario_repo.deletar(usuario)
 
         return "usuario deletado"
-
 
