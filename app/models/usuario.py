@@ -23,4 +23,4 @@ class Usuario(bd.Model, UserMixin):
         return False
 
    def get_id(self):
-       return f"user_{self.id}"
+       return str(self.id)

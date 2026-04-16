@@ -8,7 +8,7 @@ def create_app():
      app = Flask(__name__)
      app.config['SECRET_KEY'] = '12734464exdf'
 
-     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://postgres:12345@localhost:5432/monkey'
+     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://postgres:AdminHenri21@localhost:5432/monkey'
      app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
      app.config['SQLALCHEMY_ECHO'] = True
 

@@ -30,7 +30,7 @@ def mural():
 
     lista_anuncios = Anuncio.query.order_by(Anuncio.id.desc()).all()
 
-    eh_admin = current_user.admin
+    eh_admin = current_user.is_admin
 
     return render_template('index.html',
                            anuncios=lista_anuncios,

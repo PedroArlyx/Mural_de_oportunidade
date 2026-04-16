@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.services import UsuarioService
 
-bp_register = Blueprint('register',__name__,url_prefix='/register')
+bp_register = Blueprint('auth_register',__name__,url_prefix='/register')
 
 service = UsuarioService()
 
 @bp_register.route('/', methods=['GET','POST'])
-def register():
+def realizar_cadastro():
     if request.method == 'POST':
         nome = request.form.get('nome')
         email = request.form.get('email')
@@ -24,6 +24,8 @@ def register():
             return"Email ja cadastrado"
 
         return redirect(url_for('login.login'))
+
+    return render_template('cadastro.html')
 
 @bp_register.route('/Adm', methods=['GET','POST'])
 def register():

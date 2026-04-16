@@ -25,7 +25,7 @@ def login():
             return redirect(url_for('login.login'))
 
         if origem == 'admin':
-            if usuario.admin:
+            if usuario.is_admin:
                 login_user(usuario)
                 return redirect(url_for('main.painel_admin'))
             else:

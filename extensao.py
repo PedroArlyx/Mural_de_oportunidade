@@ -14,7 +14,7 @@ def load_user(user_id):
         id_numerico = int(id_numerico)
 
         if tipo =='adm':
-            return bd.sessin.get(Administrador,id_numerico)
+            return bd.session.get(Administrador,id_numerico)
         elif tipo == 'user':
             return bd.session.get(Usuario,id_numerico)
     except:
