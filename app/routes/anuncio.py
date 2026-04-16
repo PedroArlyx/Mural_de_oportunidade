@@ -1,7 +1,4 @@
-from flask import Blueprint, request, redirect, flash, url_for
-
-
-from app.models import Anuncio
+from flask import Blueprint, request, redirect, url_for, flash
 from app.services import AnuncioService
 from flask_login import current_user, login_required
 
@@ -21,8 +18,10 @@ def criar_anuncio():
         descricao = request.form.get('descricao')
         preco = request.form.get('preco')
 
-        if not titulo or not descricao or not preco or not categoria_id:
-            return "preencha todos os campos obrigatorios"
+        if not titulo or not descricao or not preco :
+            flash("Preencha todos os campos!", "error")
+            return redirect(url_for('main.home'))
+
 
         try:
             preco = float(preco)
@@ -35,7 +34,7 @@ def criar_anuncio():
                 descricao,
                 preco)
 
-        return "anuncio criado"
+        return redirect(url_for('main.home'))
 
 @bp_anuncio.route('/deletar/<int:id>',methods = ['POST'])
 @login_required
@@ -45,7 +44,7 @@ def deletar_anuncio(id):
 
     resultado = service.deletar_anuncio(id,usuario_id)
 
-    return redirect(url_for('main.mural'))
+    return redirect(url_for('main.home'))
 
 @bp_anuncio.route('/atualizar/<int:id>',methods = ['POST'])
 @login_required
@@ -57,7 +56,8 @@ def atualizar_anuncio(id):
     preco = request.form.get('preco')
 
     if not titulo or not descricao or not preco:
-        return "Preencha todos os campos obrigatorios"
+        flash("Preencha todos os campos!", "error")
+        return redirect(url_for('main.home'))
 
     try:
         preco = float(preco)
@@ -66,25 +66,4 @@ def atualizar_anuncio(id):
 
     anuncio = service.atualizar_anuncio(id,usuario_id,titulo,descricao,preco)
 
-    return "anucio atualizado"
-
-
-@bp_anuncio.route('/cadastrar', methods=['POST'])
-@login_required
-def cadastrar():
-    from extensao import bd as db
-    from app.models import Anuncio
-
-    # Direto ao ponto: pega e salva
-    novo_anuncio = Anuncio(
-        titulo=request.form.get('titulo'),
-        descricao=request.form.get('descricao'),
-        preco=float(request.form.get('preco').replace(',', '.')) if request.form.get('preco') else 0.0,
-        categoria_id=int(request.form.get('categoria')) if request.form.get('categoria') else 1,
-        prestador_id=current_user.id
-    )
-
-    db.session.add(novo_anuncio)
-    db.session.commit()
-
-    return redirect(url_for('main.mural'))
+    return redirect(url_for('main.home'))

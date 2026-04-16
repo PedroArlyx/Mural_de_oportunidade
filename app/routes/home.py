@@ -10,7 +10,7 @@ service = AnuncioService()
 @bp_home.route('/', methods = ['GET'])
 def home():
     anuncios = service.listar_anuncios()
-    return render_template('login.html', anuncios=anuncios)
+    return render_template('index.html', anuncios=anuncios)
 
 
 @bp_home.route('/admin-painel')

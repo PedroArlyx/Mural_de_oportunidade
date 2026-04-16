@@ -33,7 +33,7 @@ def login():
                 return redirect(url_for('login.login'))
         elif origem == 'usuario':
             login_user(usuario)
-            return redirect(url_for('main.mural'))
+            return redirect(url_for('main.home'))
 
     return render_template('login.html')
 
@@ -41,6 +41,6 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect ('/login')
+    return redirect (url_for('login.login'))
 
 

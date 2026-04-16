@@ -24,3 +24,5 @@ def register():
             return"Email ja cadastrado"
 
         return redirect(url_for('login.login'))
+
+    return render_template('register.html')
