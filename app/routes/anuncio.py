@@ -75,7 +75,6 @@ def cadastrar():
     from extensao import bd as db
     from app.models import Anuncio
 
-    # Direto ao ponto: pega e salva
     novo_anuncio = Anuncio(
         titulo=request.form.get('titulo'),
         descricao=request.form.get('descricao'),
