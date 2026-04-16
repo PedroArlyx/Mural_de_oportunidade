@@ -1,0 +1,10 @@
+[project]
+name = "mural-de-oportunidade"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "flask>=3.1.3",
+    "flask-login>=0.6.3",
+    "flask-sqlalchemy>=3.1.1",
+    "psycopg[binary]>=3.3.3",
+]

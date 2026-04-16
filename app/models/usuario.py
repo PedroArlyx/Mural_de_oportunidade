@@ -18,8 +18,9 @@ class Usuario(bd.Model, UserMixin):
    cidade=bd.Column(bd.String)
    media_avaliacao=bd.Column(bd.Float)
    criado_em=bd.Column(bd.DateTime,default=bd.func.now())
-
+   admin = bd.Column(bd.Boolean, default=False)
 
    def __repr__(self):
-        return f"Usuario(nome={self.nome}, email={self.email},perfil={self.perfil},bairro={self.bairro},cidade={self.cidade},media_avaliacao={self.media_avaliacao},criado_em={self.criado_em}))"
+        return (f"Usuario(nome={self.nome}, email={self.email},perfil={self.perfil},bairro={self.bairro},"
+                f"cidade={self.cidade},media_avaliacao={self.media_avaliacao},criado_em={self.criado_em}))")
 

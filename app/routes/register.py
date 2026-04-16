@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, url_for
 from app.services import UsuarioService
 
 bp_register = Blueprint('register',__name__,url_prefix='/register')
@@ -23,4 +23,4 @@ def register():
         if not usuario:
             return"Email ja cadastrado"
 
-        return "Usuário cadastrado com sucesso!"
+        return redirect(url_for('login.login'))

@@ -8,14 +8,14 @@ def create_app():
      app = Flask(__name__)
      app.config['SECRET_KEY'] = '12734464exdf'
 
-     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://postgres:12345@localhost:5432/monkey'
+     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://postgres:AdminHenri21@localhost:5432/monkey'
      app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
      app.config['SQLALCHEMY_ECHO'] = True
 
 
      bd.init_app(app)
      login_manager.init_app(app)
-     login_manager.login_view = 'login.Login'
+     login_manager.login_view = 'login.login'
 
      app.register_blueprint(bp_home)
      app.register_blueprint(bp_login)

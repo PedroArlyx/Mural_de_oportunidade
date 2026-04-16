@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Macaquinho Faz Tudo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen flex items-center justify-center p-6">
+
+    <div class="flex flex-col md:flex-row gap-8 w-full max-w-5xl">
+
+        <div class="bg-white p-8 rounded-2xl shadow-xl border-t-8 border-red-500 flex-1 transform transition hover:scale-105">
+            <form action="{{ url_for('login.login') }}" method="POST" class="space-y-6">
+                <input type="hidden" name="origem" value="admin">
+
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-800">Login ADMIN</h2>
+                    <p class="text-gray-500 mt-2">Acesso restrito à gestão</p>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-semibold text-gray-600 ml-1">E-mail</label>
+                    <input type="email" name="email" required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition-all"
+                        placeholder="admin@macaquinho.com">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-semibold text-gray-600 ml-1">Senha</label>
+                    <input type="password" name="senha" required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white outline-none transition-all"
+                        placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-red-200 transition-all duration-300">
+                    Entrar no Painel
+                </button>
+            </form>
+        </div>
+
+        <div class="bg-white p-8 rounded-2xl shadow-xl border-t-8 border-blue-500 flex-1 transform transition hover:scale-105">
+            <form action="{{ url_for('login.login') }}" method="POST" class="space-y-6">
+                <input type="hidden" name="origem" value="usuario">
+
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-800">Login USUÁRIO</h2>
+                    <p class="text-gray-500 mt-2">Encontre ou ofereça serviços</p>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-semibold text-gray-600 ml-1">E-mail</label>
+                    <input type="email" name="email" required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all"
+                        placeholder="seu@macaquinho.com">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-semibold text-gray-600 ml-1">Senha</label>
+                    <input type="password" name="senha" required
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all"
+                        placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-blue-200 transition-all duration-300">
+                    Acessar Mural
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <script>
+          {% for category, message in messages %}
+            alert("{{ message|safe }}");
+          {% endfor %}
+        </script>
+      {% endif %}
+    {% endwith %}
+
+</body>
+</html>
