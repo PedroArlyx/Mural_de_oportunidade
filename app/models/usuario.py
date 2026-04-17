@@ -1,5 +1,5 @@
-from extensao import bd
-from extensao import login_manager
+from app.extensao import bd
+from app.extensao import login_manager
 from flask_login import UserMixin
 
 @login_manager.user_loader
@@ -18,7 +18,7 @@ class Usuario(bd.Model, UserMixin):
    cidade=bd.Column(bd.String)
    media_avaliacao=bd.Column(bd.Float)
    criado_em=bd.Column(bd.DateTime,default=bd.func.now())
-   admin = bd.Column(bd.Boolean, default=False)
+
 
    def __repr__(self):
         return (f"Usuario(nome={self.nome}, email={self.email},perfil={self.perfil},bairro={self.bairro},"

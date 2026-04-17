@@ -1,6 +1,5 @@
 from app.servidor import create_app
-from extensao import bd
-from app.models import usuario,anuncio,categoria
+from app.extensao import bd
 
 if __name__ == '__main__':
     servidor=create_app()

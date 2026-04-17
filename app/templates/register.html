@@ -2,61 +2,57 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - TrampoBairro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 </head>
+<body>
 
-<body class="bg-[#121417]">
+<div class="container">
+    <div class="register-box">
+        <h2>Criar Conta</h2>
 
-<div class="min-h-screen flex items-center justify-center p-4">
-    <div class="w-full max-w-[450px]">
+        <form method="POST">
 
-        <div class="bg-[#1a1d21] rounded-2xl shadow-2xl border-t-4 border-blue-600 p-8">
-
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-black text-white uppercase tracking-tight">
-                    Criar Conta
-                </h1>
-                <p class="text-gray-400 mt-2">
-                    Junte-se à comunidade do Macaquinho faz Tudo
-                </p>
+            <div class="input-group">
+                <input type="text" name="nome" required>
+                <label>Nome</label>
             </div>
 
-            <form action="/register" method="POST" class="space-y-5">
+            <div class="input-group">
+                <input type="email" name="email" required>
+                <label>Email</label>
+            </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1.5 ml-1">
-                        Nome Completo
-                    </label>
-                    <input type="text" name="nome" required
-                        class="w-full bg-[#24292e] border border-gray-700 rounded-lg px-4 py-3 text-white">
-                </div>
+            <div class="input-group">
+                <input type="password" name="senha" required>
+                <label>Senha</label>
+            </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1.5 ml-1">
-                        E-mail
-                    </label>
-                    <input type="email" name="email" required
-                        class="w-full bg-[#24292e] border border-gray-700 rounded-lg px-4 py-3 text-white">
-                </div>
+            <div class="input-group">
+                <input type="text" name="bairro">
+                <label>Bairro</label>
+            </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1.5 ml-1">
-                        Senha
-                    </label>
-                    <input type="password" name="senha" required
-                        class="w-full bg-[#24292e] border border-gray-700 rounded-lg px-4 py-3 text-white">
-                </div>
+            <div class="input-group">
+                <input type="text" name="cidade">
+                <label>Cidade</label>
+            </div>
 
-                <button type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg">
-                    Criar Conta
-                </button>
+            <div class="select-group">
+                <label>Perfil</label>
+                <select name="perfil">
+                    <option value="usuario">Usuário</option>
+                    <option value="admin">Administrador</option>
+                </select>
+            </div>
 
-            </form>
+            <button type="submit">Cadastrar</button>
+        </form>
 
-        </div>
+        <p class="login-link">
+            Já tem conta? <a href="{{ url_for('login.login') }}">Entrar</a>
+        </p>
+
     </div>
 </div>
 

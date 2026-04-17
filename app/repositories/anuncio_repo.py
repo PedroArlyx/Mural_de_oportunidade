@@ -1,4 +1,4 @@
-from extensao import bd
+from app.extensao import bd
 from app.models import Anuncio
 
 class AnuncioRepo:

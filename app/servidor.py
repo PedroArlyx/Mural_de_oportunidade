@@ -1,7 +1,7 @@
 from flask import Flask
-from extensao import bd
+from app.extensao import bd
 from app.routes import bp_home,bp_login,bp_register,bp_anuncio
-from extensao import login_manager
+from app.extensao import login_manager
 
 def create_app():
 

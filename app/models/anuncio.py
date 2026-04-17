@@ -1,11 +1,11 @@
-from extensao import bd
+from app.extensao import bd
 
 class Anuncio(bd.Model):
     __tablename__ = 'anuncio'
 
     id=bd.Column(bd.Integer,primary_key=True)
     prestador_id=bd.Column(bd.Integer,bd.ForeignKey('usuarios.id'))
-    categoria_id=bd.Column(bd.Integer,bd.ForeignKey('categoria.id'))
+    categoria_id=bd.Column(bd.Integer)
     titulo=bd.Column(bd.String)
     descricao=bd.Column(bd.String)
     preco=bd.Column(bd.Float)

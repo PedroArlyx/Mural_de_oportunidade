@@ -1,7 +1,7 @@
-from extensao import bd
+from app.extensao import bd
 
 class categoria(bd.Model):
     __tablename__ = 'categoria'
 
-    id = bd.Column(bd.Integer, primary_key=True)
+    id = bd.Column(bd.Integer)
     nome = bd.Column(bd.String)
