@@ -1,17 +1,36 @@
 import logging
 from http import HTTPStatus
 from flask import Blueprint, jsonify, request
-
 from app.Exceptions import AppError
 from app.services import AutenticacaoService
+from app.services import UsuarioService
 
 logger = logging.getLogger(__name__)
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 _auth_service = AutenticacaoService()
+_UsuarioService = UsuarioService()
 
+@auth_bp.route("/login", methods=["POST"])
+def register():
+    payload = request.get_json( silent=True)
+    if not payload:
+        return jsonify({"erro": "o corpo da requisicao deve ser JSON"}), HTTPStatus.BAD_REQUEST
 
-def _error_response(type: str, mensagem: str) -> dict:
-    return {"status": "error", "type": type, "mensagem": mensagem}
+    try:
+        usuario=_UsuarioService.cadastrar( nome=payload.get("nome"),
+            email=payload.get("email"),
+            senha=payload.get("senha"),
+            perfil=payload.get("perfil"),
+            bairro=payload.get("bairro"),
+            cidade=payload.get("cidade"),
+        )
+    except AppError as exc:
+        return jsonify((exc.to_dict()), exc.status_code)
+    except Exception as exc:
+        logger.error(f"erro interno ao cadrastra usuario: %s", exc, exc_info=True)
+        return jsonify({"erro": "erro interno no servidor."}), HTTPStatus.INTERNAL_SERVER_ERROR
+
+    return jsonify(usuario.to_dict()), HTTPStatus.CREATED
 
 
 @auth_bp.route("/login", methods=["POST"])
