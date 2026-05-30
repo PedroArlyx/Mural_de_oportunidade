@@ -5,4 +5,4 @@ if __name__ == '__main__':
     servidor=create_app()
     with servidor.app_context():
         bd.create_all()
-    servidor.run(debug=True)
+    servidor.run(debug=True, port = 8000)

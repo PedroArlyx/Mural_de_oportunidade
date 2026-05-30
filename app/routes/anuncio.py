@@ -1,69 +1,100 @@
-from flask import Blueprint, request, redirect, url_for, flash
-from app.services import AnuncioService
-from flask_login import current_user, login_required
+import logging
+from http import HTTPStatus
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from app.Exceptions import AppError
+from app.services.anuncio_service import AnuncioService
 
-bp_anuncio = Blueprint('anuncio', __name__,url_prefix='/anuncio')
-
-service = AnuncioService()
-
-@bp_anuncio.route('/criar', methods=['GET','POST'])
-@login_required
-def criar_anuncio():
-
-    if request.method == 'POST':
-
-        prestador_id = current_user.id
-        categoria_id = request.form.get('categoria_id')
-        titulo = request.form.get('titulo')
-        descricao = request.form.get('descricao')
-        preco = request.form.get('preco')
-
-        if not titulo or not descricao or not preco :
-            flash("Preencha todos os campos!", "error")
-            return redirect(url_for('main.home'))
+logger = logging.getLogger(__name__)
+bp_anuncios = Blueprint("anuncios", __name__, url_prefix="/anuncios")
+_service = AnuncioService()
 
 
-        try:
-            preco = float(preco)
-        except ValueError:
-            return "Precisa ser um valor numerico"
+@bp_anuncios.route("", methods=["POST"])
+@jwt_required()
+def criar():
+    payload = request.get_json(silent=True)
+    if not payload:
+        return jsonify({"erro": "Corpo da requisição deve ser JSON."}), HTTPStatus.BAD_REQUEST
 
-        anuncio=service.criar_anuncio(prestador_id,
-                categoria_id,
-                titulo,
-                descricao,
-                preco)
-
-        return redirect(url_for('main.home'))
-
-@bp_anuncio.route('/deletar/<int:id>',methods = ['POST'])
-@login_required
-def deletar_anuncio(id):
-
-    usuario_id = current_user.id
-
-    resultado = service.deletar_anuncio(id,usuario_id)
-
-    return redirect(url_for('main.home'))
-
-@bp_anuncio.route('/atualizar/<int:id>',methods = ['POST'])
-@login_required
-def atualizar_anuncio(id):
-
-    usuario_id = current_user.id
-    titulo = request.form.get('titulo')
-    descricao = request.form.get('descricao')
-    preco = request.form.get('preco')
-
-    if not titulo or not descricao or not preco:
-        flash("Preencha todos os campos!", "error")
-        return redirect(url_for('main.home'))
+    preco_raw = payload.get("preco")
+    try:
+        preco = float(preco_raw)
+    except (TypeError, ValueError):
+        return jsonify({"erro": "O preço deve ser um valor numérico."}), HTTPStatus.BAD_REQUEST
 
     try:
-        preco = float(preco)
-    except ValueError:
-        return "Preco invalido"
+        usuario_id = int(get_jwt_identity())
+        anuncio = _service.criar(
+            prestador_id=usuario_id,
+            categoria_id=payload.get("categoria_id"),
+            titulo=payload.get("titulo"),
+            descricao=payload.get("descricao"),
+            preco=preco,
+        )
+        return jsonify(anuncio.to_dict()), HTTPStatus.CREATED
+    except AppError as exc:
+        return jsonify({"erro": exc.mensagem}), exc.status_code
+    except Exception as exc:
+        logger.error("Erro ao criar anúncio: %s", exc, exc_info=True)
+        return jsonify({"erro": "Erro interno no servidor."}), HTTPStatus.INTERNAL_SERVER_ERROR
 
-    anuncio = service.atualizar_anuncio(id,usuario_id,titulo,descricao,preco)
 
-    return redirect(url_for('main.home'))
+@bp_anuncios.route("", methods=["GET"])
+def listar():
+    try:
+        anuncios = _service.listar()
+        return jsonify([a.to_dict() for a in anuncios]), HTTPStatus.OK
+    except Exception as exc:
+        logger.error("Erro ao listar anúncios: %s", exc, exc_info=True)
+        return jsonify({"erro": "Erro interno no servidor."}), HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+@bp_anuncios.route("/<int:id>", methods=["GET"])
+def buscar(id: int):
+    try:
+        anuncio = _service.buscar_por_id(id)
+        return jsonify(anuncio.to_dict()), HTTPStatus.OK
+    except AppError as exc:
+        return jsonify({"erro": exc.mensagem}), exc.status_code
+
+
+@bp_anuncios.route("/<int:id>", methods=["PUT"])
+@jwt_required()
+def atualizar(id: int):
+    payload = request.get_json(silent=True)
+    if not payload:
+        return jsonify({"erro": "Corpo da requisição deve ser JSON."}), HTTPStatus.BAD_REQUEST
+
+    preco_raw = payload.get("preco")
+    try:
+        preco = float(preco_raw)
+    except (TypeError, ValueError):
+        return jsonify({"erro": "O preço deve ser um valor numérico."}), HTTPStatus.BAD_REQUEST
+
+    try:
+        usuario_id = int(get_jwt_identity())
+        anuncio = _service.atualizar(
+            anuncio_id=id,
+            usuario_id=usuario_id,
+            titulo=payload.get("titulo"),
+            descricao=payload.get("descricao"),
+            preco=preco,
+        )
+        return jsonify(anuncio.to_dict()), HTTPStatus.OK
+    except AppError as exc:
+        return jsonify({"erro": exc.mensagem}), exc.status_code
+    except Exception as exc:
+        logger.error("Erro ao atualizar anúncio: %s", exc, exc_info=True)
+        return jsonify({"erro": "Erro interno no servidor."}), HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+@bp_anuncios.route("/<int:id>", methods=["DELETE"])
+@jwt_required()
+def deletar(id: int):
+    try:
+        usuario_id = int(get_jwt_identity())
+        _service.deletar(anuncio_id=id, usuario_id=usuario_id)
+        return "", HTTPStatus.NO_CONTENT
+    except AppError as exc:
+        return jsonify({"erro": exc.mensagem}), exc.status_code

@@ -1,26 +1,34 @@
 from app.extensao import bd
-from app.extensao import login_manager
 from flask_login import UserMixin
+from app.enums import *
 
-@login_manager.user_loader
-def load_manager(user_id):
-    return Usuario.query.get(int(user_id))
 
 class Usuario(bd.Model, UserMixin):
-   __tablename__='usuarios'
+    __tablename__ = 'usuarios'
 
-   id = bd.Column(bd.Integer,primary_key=True)
-   nome=bd.Column(bd.String)
-   email=bd.Column(bd.String, unique=True)
-   senha_hash = bd.Column(bd.String(200))
-   perfil=bd.Column(bd.String)
-   bairro=bd.Column(bd.String)
-   cidade=bd.Column(bd.String)
-   media_avaliacao=bd.Column(bd.Float)
-   criado_em=bd.Column(bd.DateTime,default=bd.func.now())
+    id = bd.Column(bd.Integer, primary_key=True)
+    nome = bd.Column(bd.String(100), nullable=False)
+    email = bd.Column(bd.String, unique=True, nullable=False, index=True)
+    senha_hash = bd.Column(bd.String(200))
+    perfil = bd.Column(bd.Enum(Perfil), nullable=False, default=Perfil.USER)
+    ativo = bd.Column(bd.Boolean, nullable=False, default=True)
+    bairro = bd.Column(bd.String)
+    cidade = bd.Column(bd.String)
+    media_avaliacao = bd.Column(bd.Float, default=0.0)
+    criado_em = bd.Column(bd.DateTime, default=bd.func.now())
 
+    def __repr__(self):
+        return f"<Usuario id={self.id} email={self.email}>"
 
-   def __repr__(self):
-        return (f"Usuario(nome={self.nome}, email={self.email},perfil={self.perfil},bairro={self.bairro},"
-                f"cidade={self.cidade},media_avaliacao={self.media_avaliacao},criado_em={self.criado_em}))")
-
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome": self.nome,
+            "email": self.email,
+            "perfil": self.perfil.value if hasattr(self.perfil, 'value') else self.perfil,
+            "ativo": self.ativo,
+            "bairro": self.bairro if self.bairro else None,
+            "cidade": self.cidade if self.cidade else None,
+            "media_avaliacao": float(self.media_avaliacao) if self.media_avaliacao is not None else 0.0,
+            "criado_em": self.criado_em.isoformat() if self.criado_em else None
+        }

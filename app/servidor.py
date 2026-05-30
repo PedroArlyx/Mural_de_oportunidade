@@ -1,26 +1,30 @@
 from flask import Flask
 from app.extensao import bd
-from app.routes import bp_home,bp_login,bp_register,bp_anuncio
-from app.extensao import login_manager
+from app.routes import bp_home, bp_register, bp_anuncios,bp_adm, auth_bp,bp_contratos,bp_categorias
+from flask_jwt_extended import JWTManager
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 
 def create_app():
+    app = Flask(__name__)
 
-     app = Flask(__name__)
-     app.config['SECRET_KEY'] = '12734464exdf'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
+    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ECHO'] = False
 
-     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://postgres:12345@localhost:5432/monkey'
-     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-     app.config['SQLALCHEMY_ECHO'] = True
+    bd.init_app(app)
+    JWTManager(app)
 
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(bp_categorias)
+    app.register_blueprint(bp_contratos)
+    app.register_blueprint(bp_home)
+    app.register_blueprint(bp_register)
+    app.register_blueprint(bp_anuncios)
+    app.register_blueprint(bp_adm)
 
-     bd.init_app(app)
-     login_manager.init_app(app)
-     login_manager.login_view = 'login.login'
-
-     app.register_blueprint(bp_home)
-     app.register_blueprint(bp_login)
-     app.register_blueprint(bp_register)
-     app.register_blueprint(bp_anuncio)
-
-
-     return app
+    return app

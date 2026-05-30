@@ -1,21 +1,38 @@
 from app.extensao import bd
 from app.models import Anuncio
+from typing import List, Optional
+
 
 class AnuncioRepo:
 
     def salvar_anuncio(self, anuncio):
-        bd.session.add(anuncio)
-        bd.session.commit()
-        return anuncio
-    def listar_todos_anuncios(self):
-        return Anuncio.query.all()
-        return str(Anuncio)
-    def deletar_anuncio(self, anuncio):
-        bd.session.delete(anuncio)
-        bd.session.commit()
-    def atualizar_anuncio(self, anuncio):
-        bd.session.add(anuncio)
-        bd.session.commit()
+        try:
+            bd.session.add(anuncio)
+            bd.session.commit()
+            return anuncio
+        except Exception :
+            bd.session.rollback()
+            raise
 
-    def buscar_por_id(self,id ):
+    def listar_todos_anuncios(self) -> List[Anuncio]:
+        return Anuncio.query.all()
+
+    def deletar_anuncio(self, anuncio: Anuncio) -> None:
+        try:
+            bd.session.delete(anuncio)
+            bd.session.commit()
+        except Exception :
+            bd.session.rollbacck()
+            raise
+
+    def atualizar_anuncio(self, anuncio: Anuncio) -> Anuncio:
+        try:
+            bd.session.add(anuncio)
+            bd.session.commit()
+            return anuncio
+        except Exception :
+            bd.session.rollback()
+            raise
+
+    def buscar_por_id(self, id: int) -> Optional[Anuncio]:
         return Anuncio.query.get(id)

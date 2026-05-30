@@ -1,54 +1,57 @@
+from typing import List
+from app.Exceptions import BadRequestError, ForbiddenError, NotFoundError
 from app.models.anuncio import Anuncio
-from app.repositories import AnuncioRepo
+from app.repositories.anuncio_repo import AnuncioRepo
 
 
 class AnuncioService:
+
     def __init__(self):
-        self.anuncioRepo = AnuncioRepo()
+        self._repo = AnuncioRepo()
 
-    def criar_anuncio(self,prestador_id, categoria_id,titulo,descricao,preco):
-        if preco < 0:
-            return "Preco nao poder ser negativo"
+    def criar(self, prestador_id: int, categoria_id: int, titulo: str, descricao: str, preco: float) -> Anuncio:
+        self._validar_dados(titulo, descricao, preco)
+        anuncio = Anuncio(
+            prestador_id=prestador_id,
+            categoria_id=categoria_id,
+            titulo=titulo.strip(),
+            descricao=descricao.strip(),
+            preco=preco,
+        )
+        return self._repo.salvar_anuncio(anuncio)
 
-        anuncio = Anuncio(prestador_id=prestador_id,categoria_id=categoria_id,titulo = titulo,descricao= descricao,preco=preco,status='ativo')
-        return self.anuncioRepo.salvar_anuncio(anuncio)
+    def listar(self) -> List[Anuncio]:
+        return self._repo.listar_todos_anuncios()
 
-    def listar_anuncios(self):
-        return self.anuncioRepo.listar_todos_anuncios()
-
-    def atualizar_anuncio(self,id,usuario_id,titulo,descricao,preco):
-        anuncio = self.anuncioRepo.buscar_por_id(id)
-
+    def buscar_por_id(self, anuncio_id: int) -> Anuncio:
+        anuncio = self._repo.buscar_por_id(anuncio_id)
         if not anuncio:
-           return "Anuncio nao encontrado"
+            raise NotFoundError("Anúncio não encontrado.")
+        return anuncio
 
-        if anuncio.prestador_id != usuario_id:
-            return "vc nao tem permissao para aditar esse anuncio"
+    def atualizar(self, anuncio_id: int, usuario_id: int, titulo: str, descricao: str, preco: float) -> Anuncio:
+        anuncio = self.buscar_por_id(anuncio_id)
+        self._verificar_permissao(anuncio, usuario_id)
+        self._validar_dados(titulo, descricao, preco)
 
-        if preco < 0:
-            return "Preco nao poder ser negativo"
-
-        if not titulo or not descricao:
-            return "Dados invalidos"
-
-        anuncio.titulo = titulo
-        anuncio.descricao = descricao
+        anuncio.titulo = titulo.strip()
+        anuncio.descricao = descricao.strip()
         anuncio.preco = preco
+        return self._repo.salvar_anuncio(anuncio)
 
-        return self.anuncioRepo.salvar_anuncio(anuncio)
+    def deletar(self, anuncio_id: int, usuario_id: int) -> None:
+        anuncio = self.buscar_por_id(anuncio_id)
+        self._verificar_permissao(anuncio, usuario_id)
+        self._repo.deletar_anuncio(anuncio)
 
-    def deletar_anuncio(self,id,usuario_id):
-        anuncio = self.anuncioRepo.buscar_por_id(id)
+    def _validar_dados(self, titulo: str, descricao: str, preco: float) -> None:
+        if not titulo or not titulo.strip():
+            raise BadRequestError("O título é obrigatório.")
+        if not descricao or not descricao.strip():
+            raise BadRequestError("A descrição é obrigatória.")
+        if preco is None or float(preco) < 0:
+            raise BadRequestError("O preço não pode ser negativo.")
 
-        if not anuncio:
-            return "anuncio nao encotrado"
-
+    def _verificar_permissao(self, anuncio: Anuncio, usuario_id: int) -> None:
         if anuncio.prestador_id != usuario_id:
-            return "voce nao tem permissao para deletar esse anuncio"
-
-        self.anuncioRepo.deletar_anuncio(anuncio)
-
-        return "anuncio deletado"
-
-
-
+            raise ForbiddenError("Você não tem permissão para modificar este anúncio.")
