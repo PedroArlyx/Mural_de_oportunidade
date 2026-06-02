@@ -4,13 +4,14 @@ from app.routes import bp_home,bp_anuncios,bp_adm, auth_bp,bp_contratos,bp_categ
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 import os
+from flask_cors import CORS
 
 load_dotenv()
 
 
 def create_app():
     app = Flask(__name__)
-
+    CORS(app)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

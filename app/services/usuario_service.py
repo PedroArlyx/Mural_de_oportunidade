@@ -135,8 +135,8 @@ class UsuarioService:
         self._repo.deletar(usuario)
     def _converter_perfil(self,perfil: str) -> Perfil:
         try:
-            return Perfil[perfil.strip().uperr()]
+            return Perfil[perfil.strip().upper()]
         except(KeyError,AttributeError):
-            valores =[p.vakue for p in perfil]
+            valores =[p.value for p in Perfil]
             raise BaseException (f"Perfil invalido. valores aceitos: {valores}")
 

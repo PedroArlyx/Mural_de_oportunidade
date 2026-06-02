@@ -73,3 +73,19 @@ def mudar_status(id: int):
     except Exception as exc:
         logger.error("Erro operacional ao modificar status do contrato: %s", exc, exc_info=True)
         return jsonify({"erro": "Erro interno no servidor."}), HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+@bp_contratos.route("", methods=["GET"])
+@jwt_required()
+def listar():
+    try:
+        usuario_logado_id = int(get_jwt_identity())
+        contratos = _service.listar_por_usuario(
+            solicitante_id=usuario_logado_id,
+            usuario_alvo_id=usuario_logado_id
+        )
+        return jsonify([c.to_dict() for c in contratos]), HTTPStatus.OK
+
+    except Exception as exc:
+        logger.error("Erro ao listar contratos do usuário: %s", exc, exc_info=True)
+        return jsonify({"erro": "Erro interno no servidor."}), HTTPStatus.INTERNAL_SERVER_ERROR
