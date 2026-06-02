@@ -14,7 +14,7 @@ class CategoriaService:
 
     def cadastrar_por_adm(self, solicitante_id: int, nome: str) -> Categoria:
 
-        self._exigir_perfil_admin_pelo_service(solicitante_id)
+        self._exigir_perfil_admin(solicitante_id)
 
         if not nome or not nome.strip():
             raise BadRequestError("O nome da categoria é obrigatório.")

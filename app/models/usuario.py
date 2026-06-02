@@ -8,8 +8,8 @@ class Usuario(bd.Model, UserMixin):
 
     id = bd.Column(bd.Integer, primary_key=True)
     nome = bd.Column(bd.String(100), nullable=False)
-    email = bd.Column(bd.String, unique=True, nullable=False, index=True)
-    senha_hash = bd.Column(bd.String(200))
+    email = bd.Column(bd.String(255), unique=True, nullable=False, index=True)
+    senha_hash = bd.Column(bd.String(200),nullable=False)
     perfil = bd.Column(bd.Enum(Perfil), nullable=False, default=Perfil.USER)
     ativo = bd.Column(bd.Boolean, nullable=False, default=True)
     bairro = bd.Column(bd.String)

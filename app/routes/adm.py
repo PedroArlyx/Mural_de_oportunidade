@@ -3,7 +3,8 @@ from http import HTTPStatus
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.Exceptions import AppError
-from app.services.usuario_service import UsuarioService
+from app.services import UsuarioService
+from app.middlewares import autorizacao_adm
 
 logger = logging.getLogger(__name__)
 bp_adm = Blueprint("adm", __name__, url_prefix="/adm")
@@ -11,7 +12,8 @@ _service = UsuarioService()
 
 
 @bp_adm.route("", methods=["POST"])
-@jwt_required
+@jwt_required()
+@autorizacao_adm()
 def registrar():
     payload = request.get_json(silent=True)
     if not payload:
@@ -39,6 +41,7 @@ def registrar():
 
 @bp_adm.route("", methods=["GET"])
 @jwt_required()
+@autorizacao_adm()
 def listar():
     try:
         solicitante_id = int(get_jwt_identity())
@@ -53,6 +56,7 @@ def listar():
 
 @bp_adm.route("/<int:id>", methods=["GET"])
 @jwt_required()
+@autorizacao_adm(permitir_proprio=True)
 def buscar(id: int):
     try:
         usuario = _service.buscar_por_id(id)
@@ -63,6 +67,7 @@ def buscar(id: int):
 
 @bp_adm.route("/<int:id>", methods=["PUT"])
 @jwt_required()
+@autorizacao_adm(permitir_proprio=True)
 def atualizar(id: int):
     payload = request.get_json(silent=True)
     if not payload:
@@ -84,6 +89,7 @@ def atualizar(id: int):
 
 @bp_adm.route("/filtro-perfil", methods=["GET"])
 @jwt_required()
+@autorizacao_adm()
 def listar_por_perfil():
 
     perfil_alvo = request.args.get("perfil")
@@ -106,6 +112,7 @@ def listar_por_perfil():
 
 @bp_adm.route("/<int:id>/status", methods=["PATCH"])
 @jwt_required()
+@autorizacao_adm()
 def alternar_status(id: int):
 
     payload = request.get_json(silent=True) or {}
@@ -131,6 +138,7 @@ def alternar_status(id: int):
 
 @bp_adm.route("/<int:id>/perfil", methods=["PATCH"])
 @jwt_required()
+@autorizacao_adm()
 def alterar_perfil(id: int):
 
     payload = request.get_json(silent=True) or {}
@@ -153,6 +161,7 @@ def alterar_perfil(id: int):
 
 @bp_adm.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
+@autorizacao_adm()
 def deletar(id: int):
 
     try:
@@ -167,7 +176,8 @@ def deletar(id: int):
     except Exception as exc:
         logger.error("Erro ao deletar usuário pelo ADM: %s", exc, exc_info=True)
         return jsonify({"erro": "Erro interno no servidor."}), HTTPStatus.INTERNAL_SERVER_ERROR
-@bp_adm.route("/me", methods=["GET"])
+
+@bp_adm.route("/me", methods=["DELETE"])
 @jwt_required()
 def deletar_minha_conta():
     try:

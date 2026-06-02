@@ -7,6 +7,9 @@ class AppError(Exception):
         super().__init__(mensagem)
         self.mensagem = mensagem
 
+    def to_dict(self):
+        return {"sttatus": "error","type": self.error_type, "mensagem": self.mensagem}
+
 
 class BadRequestError(AppError):
     status_code = 400

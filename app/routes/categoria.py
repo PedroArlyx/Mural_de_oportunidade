@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.Exceptions import AppError
 from app.services.categoria_service import CategoriaService
+from app.middlewares import autorizacao_adm
 
 logger = logging.getLogger(__name__)
 bp_categorias = Blueprint("categorias", __name__, url_prefix="/categorias")
@@ -41,6 +42,7 @@ def buscar(id: int):
 
 @bp_categorias.route("", methods=["POST"])
 @jwt_required()
+@autorizacao_adm()
 def criar():
 
     payload = request.get_json(silent=True)
@@ -65,6 +67,7 @@ def criar():
 
 @bp_categorias.route("/<int:id>", methods=["PUT"])
 @jwt_required()
+@autorizacao_adm()
 def atualizar(id: int):
 
     payload = request.get_json(silent=True)
@@ -89,6 +92,7 @@ def atualizar(id: int):
 
 @bp_categorias.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
+@autorizacao_adm()
 def deletar(id: int):
 
     try:

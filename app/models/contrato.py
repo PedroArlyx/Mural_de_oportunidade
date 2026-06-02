@@ -17,7 +17,7 @@ class Contrato(bd.Model):
     anuncio = bd.relationship('Anuncio', backref=bd.backref('contratos', lazy=True))
 
     def __repr__(self) -> str:
-        return f"<Contrato id={self.id}  status={self.status} "
+        return f"<Contrato id={self.id}  status={self.status}>"
 
     def to_dict(self):
 

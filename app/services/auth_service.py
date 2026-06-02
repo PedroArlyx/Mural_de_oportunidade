@@ -16,7 +16,7 @@ class AutenticacaoService:
 
         if not usuario or not check_password_hash(usuario.senha_hash, senha):
             raise UnauthorizedError("E-mail ou senha Incorretos")
-        if hasattr(usuario, "ativo") and not usuario.ativo:
+        if not usuario.ativo:
             raise UnauthorizedError("Sua conta esta desativada")
 
         token = self.gerar_token(usuario.id)

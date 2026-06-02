@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensao import bd
-from app.models.categoria import Categoria
+from app.models import Categoria
 
 
 class RepositoryError(Exception):
