@@ -12,6 +12,7 @@ class Usuario(bd.Model, UserMixin):
     senha_hash = bd.Column(bd.String(200),nullable=False)
     perfil = bd.Column(bd.Enum(Perfil), nullable=False, default=Perfil.USER)
     ativo = bd.Column(bd.Boolean, nullable=False, default=True)
+    numero = bd.Column(bd.Numeric(10, 2), nullable=False)
     bairro = bd.Column(bd.String)
     cidade = bd.Column(bd.String)
     media_avaliacao = bd.Column(bd.Float, default=0.0)
@@ -27,6 +28,7 @@ class Usuario(bd.Model, UserMixin):
             "email": self.email,
             "perfil": self.perfil.value if hasattr(self.perfil, 'value') else self.perfil,
             "ativo": self.ativo,
+            "numero": self.numero,
             "bairro": self.bairro if self.bairro else None,
             "cidade": self.cidade if self.cidade else None,
             "media_avaliacao": float(self.media_avaliacao) if self.media_avaliacao is not None else 0.0,

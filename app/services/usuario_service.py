@@ -14,8 +14,8 @@ class UsuarioService:
     def __init__(self):
         self._repo = UsuarioRepo()
 
-    def cadastrar(self, nome: str, email: str, senha: str, perfil: str, bairro: str, cidade: str) -> Usuario:
-        self._validar_campos_obrigatorios(nome=nome, email=email, senha=senha, perfil=perfil, bairro=bairro,cidade=cidade)
+    def cadastrar(self, nome: str, email: str, senha: str, perfil: str,numero: int, bairro: str, cidade: str) -> Usuario:
+        self._validar_campos_obrigatorios(nome=nome, email=email, senha=senha,numero=numero ,perfil=perfil, bairro=bairro,cidade=cidade)
         self._validar_email(email)
 
         email = email.lower().strip()
@@ -28,18 +28,11 @@ class UsuarioService:
             email=email,
             senha_hash=generate_password_hash(senha),
             perfil=perfil_enum,
+            numero=numero,
             bairro=bairro.strip(),
             cidade=cidade.strip(),
         )
         return self._repo.salvar(usuario)
-
-    def autenticar(self, email: str, senha: str) -> Usuario:
-        usuario = self._repo.buscar_por_email(email.lower().strip())
-        if not usuario or not check_password_hash(usuario.senha_hash, senha):
-            raise UnauthorizedError("E-mail ou senha incorretos.")
-        if not usuario.ativo:
-            raise UnauthorizedError("Conta desativada.")
-        return usuario
 
     def buscar_por_id(self, usuario_id: int) -> Usuario:
         usuario = self._repo.buscar_por_id(usuario_id)
@@ -51,20 +44,19 @@ class UsuarioService:
         self._exigir_perfil_admin(solicitante_id)
         return self._repo.listar_todos()
 
-    def atualizar(self, usuario_id: int, nome: str, email: str) -> Usuario:
+    def atualizar(self, usuario_id: int, nome: str, email: str,numero: str,bairro:str,cidade:str) -> Usuario:
         usuario = self.buscar_por_id(usuario_id)
-
-        if not nome or not nome.strip():
-            raise BadRequestError("O nome é obrigatório.")
 
         self._validar_email(email)
         email = email.lower().strip()
 
         if usuario.email != email:
             self._garantir_email_unico(email)
-
         usuario.nome = nome.strip()
-        usuario.email = email
+        usuario.email = email.strip()
+        usuario.numero = numero.strip()
+        usuario.bairro = bairro.strip()
+        usuario.cidade = cidade.strip()
         return self._repo.salvar(usuario)
 
     def deletar(self,usuario_id:int )-> List[Usuario]:
@@ -73,7 +65,7 @@ class UsuarioService:
 
     def _validar_campos_obrigatorios(self, **campos) -> None:
         nomes_pt = {
-            "nome": "nome", "email": "e-mail", "senha": "senha",
+            "nome": "nome", "email": "e-mail", "senha": "senha","numero": "numero",
             "perfil": "perfil", "bairro": "bairro", "cidade": "cidade",
         }
         for campo, valor in campos.items():

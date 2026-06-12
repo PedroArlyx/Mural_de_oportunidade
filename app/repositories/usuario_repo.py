@@ -22,16 +22,6 @@ class UsuarioRepo:
 
     def listar_todos(self) -> List[Usuario]:
         return Usuario.query.all()
-
-    # def atualizar(self, usuario: Usuario) -> Usuario:
-    #     try:
-    #         bd.session.add(usuario)
-    #         bd.session.commit()
-    #         return usuario
-    #     except Exception :
-    #         bd.session.rollback()
-    #         raise
-
     def deletar(self, usuario: Usuario) -> None:
         try:
             bd.session.delete(usuario)

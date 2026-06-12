@@ -28,6 +28,7 @@ def registrar():
             email=payload.get("email"),
             senha=payload.get("senha"),
             perfil=payload.get("perfil"),
+            numero=payload.get("numero"),
             bairro=payload.get("bairro"),
             cidade=payload.get("cidade"),
         )
@@ -78,6 +79,10 @@ def atualizar(id: int):
             usuario_id=id,
             nome=payload.get("nome"),
             email=payload.get("email"),
+            numero=payload.get("numero"),
+            bairro=payload.get("bairro"),
+            cidade=payload.get("cidade"),
+
         )
         return jsonify(usuario.to_dict()), HTTPStatus.OK
     except AppError as exc:

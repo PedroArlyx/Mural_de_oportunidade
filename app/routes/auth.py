@@ -22,6 +22,7 @@ def register():
                                             email=payload.get("email"),
                                             senha=payload.get("senha"),
                                             perfil=payload.get("perfil"),
+                                            numero=payload.get("numero"),
                                             bairro=payload.get("bairro"),
                                             cidade=payload.get("cidade"),
                                             )

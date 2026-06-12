@@ -83,7 +83,6 @@ class ContratoService:
         self._repo.deletar(contrato)
 
 
-
     def _usuario_eh_envolvido_ou_adm(self, usuario_id: int, contrato: Contrato) -> bool:
         if usuario_id in [contrato.cliente_id, contrato.prestador_id]:
             return True

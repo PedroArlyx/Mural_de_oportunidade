@@ -1,7 +1,7 @@
 from typing import List
 from app.Exceptions import BadRequestError, ForbiddenError, NotFoundError
-from app.models.anuncio import Anuncio
-from app.repositories.anuncio_repo import AnuncioRepo
+from app.models import Anuncio
+from app.repositories import AnuncioRepo
 
 
 class AnuncioService:

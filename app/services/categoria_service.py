@@ -3,7 +3,7 @@ from app.models.categoria import Categoria
 from app.repositories import CategoriaRepo
 from app.repositories.categoria_repo import RepositoryError
 from app.services.usuario_service import UsuarioService
-from app.Exceptions import BadRequestError, ConflictError, NotFoundError, UnauthorizedError
+from app.Exceptions import BadRequestError, ConflictError, NotFoundError
 
 
 class CategoriaService:

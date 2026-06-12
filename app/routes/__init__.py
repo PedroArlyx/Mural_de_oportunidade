@@ -4,3 +4,4 @@ from .anuncio import bp_anuncios
 from .auth import auth_bp
 from .contrato import bp_contratos
 from .categoria import bp_categorias
+from .avaliacao import bp_avaliacao

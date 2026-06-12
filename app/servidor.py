@@ -1,6 +1,6 @@
 from flask import Flask
 from app.extensao import bd
-from app.routes import bp_home,bp_anuncios,bp_adm, auth_bp,bp_contratos,bp_categorias
+from app.routes import bp_home,bp_anuncios,bp_adm, auth_bp,bp_contratos,bp_categorias,bp_avaliacao
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 import os
@@ -26,5 +26,6 @@ def create_app():
     app.register_blueprint(bp_home)
     app.register_blueprint(bp_anuncios)
     app.register_blueprint(bp_adm)
+    app.register_blueprint(bp_avaliacao)
 
     return app
