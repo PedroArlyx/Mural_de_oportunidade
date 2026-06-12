@@ -29,7 +29,7 @@ class AnuncioService:
             raise NotFoundError("Anúncio não encontrado.")
         return anuncio
 
-    def atualizar(self, anuncio_id: int, usuario_id: int, titulo: str, descricao: str, preco: float) -> Anuncio:
+    def atualizar(self, anuncio_id: int, usuario_id: int, titulo: str, descricao: str, preco: float,categoria_id: int) -> Anuncio:
         anuncio = self.buscar_por_id(anuncio_id)
         self._verificar_permissao(anuncio, usuario_id)
         self._validar_dados(titulo, descricao, preco)
@@ -37,6 +37,7 @@ class AnuncioService:
         anuncio.titulo = titulo.strip()
         anuncio.descricao = descricao.strip()
         anuncio.preco = preco
+        anuncio.categoria_id = categoria_id
         return self._repo.salvar_anuncio(anuncio)
 
     def deletar(self, anuncio_id: int, usuario_id: int) -> None:

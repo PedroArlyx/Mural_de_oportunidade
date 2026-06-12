@@ -5,6 +5,8 @@ from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 import os
 from flask_cors import CORS
+from flask_migrate import Migrate
+
 
 load_dotenv()
 
@@ -18,6 +20,7 @@ def create_app():
     app.config['SQLALCHEMY_ECHO'] = False
 
     bd.init_app(app)
+    Migrate(app, bd)
     JWTManager(app)
 
     app.register_blueprint(auth_bp)

@@ -80,6 +80,7 @@ def atualizar(id: int):
             titulo=payload.get("titulo"),
             descricao=payload.get("descricao"),
             preco=preco,
+            categoria_id=payload.get("categoria_id"),
         )
         return jsonify(anuncio.to_dict()), HTTPStatus.OK
     except AppError as exc:
