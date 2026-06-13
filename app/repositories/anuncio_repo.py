@@ -5,7 +5,7 @@ from typing import List, Optional
 
 class AnuncioRepo:
 
-    def salvar_anuncio(self, anuncio):
+    def salvar_anuncio(self, anuncio: Anuncio)-> Anuncio:
         try:
             bd.session.add(anuncio)
             bd.session.commit()
@@ -35,4 +35,4 @@ class AnuncioRepo:
             raise
 
     def buscar_por_id(self, id: int) -> Optional[Anuncio]:
-        return Anuncio.query.get(id)
+        return Anuncio.query.get(Anuncio,id)

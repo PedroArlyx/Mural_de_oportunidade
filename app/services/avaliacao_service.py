@@ -10,7 +10,7 @@ class AvaliacaoService:
         self._repo = AvaliacaoRepo()
 
     def criar(self,contrato_id:int,usuario_id,nota:int,comentario:str) -> Avaliacao:
-        avaliacao = Avaliacao(contrato_id=contrato_id,usuario_id=usuario_id,nota=nota,comentario=comentario.strip())
+        avaliacao = Avaliacao(contrato_id=contrato_id,usuario_id=usuario_id,nota=nota,comentario=comentario.strip() if comentario else "")
         return self._repo.salvar(avaliacao)
 
     def listar_todas_avaliacao(self) -> List[Avaliacao]:

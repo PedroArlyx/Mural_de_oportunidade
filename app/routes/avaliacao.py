@@ -69,7 +69,7 @@ def atualizar(id: int):
     try:
         solicitante_id = int(get_jwt_identity())
 
-        avaliacao_atualizada = _avaliacao_service.atualizar(avaliacao_id=id, **payload)
+        avaliacao_atualizada = _avaliacao_service.atualizar(avaliacao_id=solicitante_id, **payload)
         return jsonify(avaliacao_atualizada.to_dict()), HTTPStatus.OK
     except AppError as exc:
         return jsonify({"erro": exc.mensagem}), exc.status_code

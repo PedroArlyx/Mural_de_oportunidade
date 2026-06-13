@@ -21,13 +21,13 @@ def register():
         usuario = _UsuarioService.cadastrar(nome=payload.get("nome"),
                                             email=payload.get("email"),
                                             senha=payload.get("senha"),
-                                            perfil=payload.get("perfil"),
+                                            perfil="USER",
                                             numero=payload.get("numero"),
                                             bairro=payload.get("bairro"),
                                             cidade=payload.get("cidade"),
                                             )
     except AppError as exc:
-        return jsonify((exc.to_dict()), exc.status_code)
+        return jsonify(exc.to_dict()), exc.status_code
     except Exception as exc:
         logger.error(f"erro interno ao cadrastra usuario: %s", exc, exc_info=True)
         return jsonify({"erro": "erro interno no servidor."}), HTTPStatus.INTERNAL_SERVER_ERROR
@@ -51,6 +51,6 @@ def login():
         token = _auth_service.autenticar(email=email, senha=senha)
     except UnauthorizedError as exc:
         logger.error("Erro interno na autenticação: %s", exc, exc_info=True)
-        return jsonify({"erro": "Erro interno do servidor"}), HTTPStatus.INTERNAL_SERVER_ERROR
+        return jsonify({"erro": exc.mensagem}), exc.status_code
 
     return jsonify({"status": "success", "data": {"access_token": token, "token_type": "Bearer"}}), HTTPStatus.OK,
