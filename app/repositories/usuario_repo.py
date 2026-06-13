@@ -30,4 +30,4 @@ class UsuarioRepo:
             bd.session.rollback()
             raise
     def listar_por_perfil(self, perfil: str) -> List[Usuario]:
-        return Usuario.query.filter_by(perfil=perfil.strip().lower()).all()
+        return Usuario.query.filter_by(perfil=perfil.strip().upper()).all()

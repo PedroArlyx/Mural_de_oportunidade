@@ -54,9 +54,9 @@ class UsuarioService:
             self._garantir_email_unico(email)
         usuario.nome = nome.strip()
         usuario.email = email.strip()
-        usuario.numero = numero.strip()
-        usuario.bairro = bairro.strip()
-        usuario.cidade = cidade.strip()
+        usuario.numero = numero
+        usuario.bairro = bairro
+        usuario.cidade = cidade
         return self._repo.salvar(usuario)
 
     def deletar(self,usuario_id:int )-> List[Usuario]:

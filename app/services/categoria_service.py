@@ -1,7 +1,7 @@
 from typing import List
 from app.models.categoria import Categoria
 from app.repositories import CategoriaRepo
-from app.repositories.categoria_repo import RepositoryError
+
 from app.services.usuario_service import UsuarioService
 from app.Exceptions import BadRequestError, ConflictError, NotFoundError
 
@@ -27,14 +27,14 @@ class CategoriaService:
         try:
 
             return self._repo.criar(nome_limpo)
-        except RepositoryError as exc:
-            raise BadRequestError(exc.mensagem)
+        except Exception as exc:
+            raise Exception(exc.mensagem)
 
     def buscar_por_id(self, categoria_id: int) -> Categoria:
 
         try:
             categoria = self._repo.buscar_por_id(categoria_id)
-        except RepositoryError as exc:
+        except Exception as exc:
             raise BadRequestError(exc.mensagem)
         if not categoria:
             raise NotFoundError("Categoria não encontrada.")

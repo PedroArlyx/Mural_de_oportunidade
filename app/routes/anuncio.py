@@ -92,7 +92,6 @@ def atualizar(id: int):
 
 @bp_anuncios.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
-
 def deletar(id: int):
     try:
         usuario_id = int(get_jwt_identity())

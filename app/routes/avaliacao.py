@@ -63,7 +63,7 @@ def criar():
 
 @bp_avaliacao.route("/<int:id>", methods=["PUT"])
 @jwt_required()
-@autorizacao_adm()
+@autorizacao_adm(permitir_proprio=True)
 def atualizar(id: int):
 
     payload = request.get_json(silent=True)
@@ -84,7 +84,7 @@ def atualizar(id: int):
 
 @bp_avaliacao.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
-@autorizacao_adm()
+@autorizacao_adm(permitir_proprio=True)
 def deletar(id: int):
 
     try:
