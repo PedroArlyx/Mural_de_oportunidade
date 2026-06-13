@@ -12,7 +12,6 @@ _avaliacao_service = AvaliacaoService()
 
 
 @bp_avaliacao.route("", methods=["GET"])
-@jwt_required()
 def listar():
 
     try:
@@ -27,7 +26,6 @@ def listar():
 
 
 @bp_avaliacao.route("/<int:id>", methods=["GET"])
-@jwt_required()
 def buscar(id: int):
 
     try:
@@ -49,11 +47,9 @@ def criar():
         return jsonify({"erro": "Corpo da requisição deve ser JSON."}), HTTPStatus.BAD_REQUEST
 
     try:
-
         usuario_id = int(get_jwt_identity())
-
         nova_avaliacao = _avaliacao_service.criar(usuario_id=usuario_id, **payload)
-        return jsonify({"id": nova_avaliacao.id,"comentario": nova_avaliacao.comentario, "notA" : nova_avaliacao.nota}), HTTPStatus.CREATED
+        return jsonify({"id": nova_avaliacao.id,"comentario": nova_avaliacao.comentario, "nota" : nova_avaliacao.nota}), HTTPStatus.CREATED
     except AppError as exc:
         return jsonify({"erro": exc.mensagem}), exc.status_code
     except Exception as exc:
@@ -90,7 +86,7 @@ def deletar(id: int):
     try:
         solicitante_id = int(get_jwt_identity())
 
-        _avaliacao_service.deletar(avaliacao_id=id,solicitante_id=solicitante_id)
+        _avaliacao_service.deletar(avaliacao_id=id,usuario_id=solicitante_id)
         return "", HTTPStatus.NO_CONTENT
     except AppError as exc:
         return jsonify({"erro": exc.mensagem}), exc.status_code

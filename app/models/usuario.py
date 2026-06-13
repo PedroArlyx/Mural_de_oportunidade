@@ -12,7 +12,7 @@ class Usuario(bd.Model, UserMixin):
     senha_hash = bd.Column(bd.String(200),nullable=False)
     perfil = bd.Column(bd.Enum(Perfil), nullable=False, default=Perfil.USER)
     ativo = bd.Column(bd.Boolean, nullable=False, default=True)
-    numero = bd.Column(bd.Numeric(10, 2))
+    numero = bd.Column(bd.String(20))
     bairro = bd.Column(bd.String)
     cidade = bd.Column(bd.String)
     media_avaliacao = bd.Column(bd.Float, default=0.0)

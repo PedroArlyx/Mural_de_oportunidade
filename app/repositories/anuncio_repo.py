@@ -22,7 +22,7 @@ class AnuncioRepo:
             bd.session.delete(anuncio)
             bd.session.commit()
         except Exception :
-            bd.session.rollbacck()
+            bd.session.rollback()
             raise
 
     def atualizar_anuncio(self, anuncio: Anuncio) -> Anuncio:

@@ -8,7 +8,7 @@ class AppError(Exception):
         self.mensagem = mensagem
 
     def to_dict(self):
-        return {"sttatus": "error","type": self.error_type, "mensagem": self.mensagem}
+        return {"status": "error","type": self.error_type, "mensagem": self.mensagem}
 
 
 class BadRequestError(AppError):

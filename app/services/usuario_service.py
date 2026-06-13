@@ -130,5 +130,5 @@ class UsuarioService:
             return Perfil[perfil.strip().upper()]
         except(KeyError,AttributeError):
             valores =[p.value for p in Perfil]
-            raise BaseException (f"Perfil invalido. valores aceitos: {valores}")
+            raise BadRequestError (f"Perfil invalido. valores aceitos: {valores}")
 

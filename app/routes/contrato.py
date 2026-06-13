@@ -88,4 +88,4 @@ def listar():
 
     except Exception as exc:
         logger.error("Erro ao listar contratos do usuário: %s", exc, exc_info=True)
-        return jsonify({"erro": "Erro interno no serv2idor."}), HTTPStatus.INTERNAL_SERVER_ERROR
+        return jsonify({"erro": "Erro interno no servidor."}), HTTPStatus.INTERNAL_SERVER_ERROR

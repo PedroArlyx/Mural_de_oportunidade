@@ -2,10 +2,6 @@ from typing import List, Optional
 from app.extensao import bd
 from app.models import Categoria
 
-
-
-
-
 class CategoriaRepo:
     def criar(self, nome: str) -> Categoria:
         try:

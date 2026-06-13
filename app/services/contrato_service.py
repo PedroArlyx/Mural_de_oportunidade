@@ -47,7 +47,7 @@ class ContratoService:
     def listar_por_usuario(self, solicitante_id: int, usuario_alvo_id: int) -> List[Contrato]:
 
         if solicitante_id != usuario_alvo_id:
-            self._exigir_perfil_admin_pelo_service(solicitante_id)
+            self._exigir_perfil_admin(solicitante_id)
 
         contratos_cliente = self._repo.listar_por_cliente(usuario_alvo_id)
         contratos_prestador = self._repo.listar_por_prestador(usuario_alvo_id)
@@ -88,7 +88,7 @@ class ContratoService:
             return True
 
         try:
-            self._exigir_perfil_admin_pelo_service(usuario_id)
+            self._exigir_perfil_admin(usuario_id)
             return True
         except UnauthorizedError:
             return False

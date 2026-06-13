@@ -38,7 +38,7 @@ class AnuncioService:
         anuncio.descricao = descricao.strip()
         anuncio.preco = preco
         anuncio.categoria_id = categoria_id
-        return self._repo.salvar_anuncio(anuncio)
+        return self._repo.atualizar_anuncio(anuncio)
 
     def deletar(self, anuncio_id: int, usuario_id: int) -> None:
         anuncio = self.buscar_por_id(anuncio_id)

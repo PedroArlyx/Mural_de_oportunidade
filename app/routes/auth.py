@@ -1,7 +1,7 @@
 import logging
 from http import HTTPStatus
 from flask import Blueprint, jsonify, request
-from app.Exceptions import AppError
+from app.Exceptions import AppError, UnauthorizedError
 from app.services import AutenticacaoService
 from app.services import UsuarioService
 
@@ -49,7 +49,7 @@ def login():
 
     try:
         token = _auth_service.autenticar(email=email, senha=senha)
-    except AppError as exc:
+    except UnauthorizedError as exc:
         logger.error("Erro interno na autenticação: %s", exc, exc_info=True)
         return jsonify({"erro": "Erro interno do servidor"}), HTTPStatus.INTERNAL_SERVER_ERROR
 
